@@ -29,42 +29,45 @@
                   <img src="{{ url_for('static', filename='Strikify.png') }}"
                     style="width: 185px;" alt="logo">
                 </div>
-                <h2 style="text-align: center;">Cart</h2>
+                <h2 style="text-align: center;">Order Page</h2>
                 <div>
+                  {%if not all_products%}
+                  <h5 class="text-danger" style="text-align: center;">No products to display.</h5>
+                  {%else%}
                   <table class="table table-hover overflow-y:auto;"   style="text-align: center;">
                     <thead>
                       <tr>
                         <th scope="col"  style="text-align: center;">Name</th>
                         <th scope="col">Price</th>
-                        <th scope="col">Quantity</th>
                         <th scope="col">Action</th>
                       </tr>
                     </thead>
 
                     <tbody>
-                      {%if all_products:%}
                       {%for each_product in all_products%}
                       <tr>
                         <td>{{each_product.product_name}}</td>
                         <td>${{each_product.product_price}}</td>
-                        <td>{{each_product.quantity_in_stock}}</td>
                         <td>
                           <a href="/add_item_to_cart/{{each_product.id}}" class="btn btn-dark btn-block fa-lg gradient-custom-2 mb-3">Add to Cart</a>
                         </td>
                       </tr>
                       {%endfor%}
-                      {%endif%}
+                      
                     </tbody>
                   </table>
                   <div  style="text-align: center;">
                     <a href="/checkout"  class="btn btn-success btn-block fa-lg gradient-custom-2 mb-3">Checkout ({{checkout_quantity}})</a>
                   </div>
+                  {%endif%}
+
 
                 <div style="text-align: center;">
+                  
                   <a href="/dashboard"  class="btn btn-dark btn-block fa-lg gradient-custom-2 mb-3">Back to Dashboard</a> 
                 </div>
                     
-
+                
                 </div>
                 
 

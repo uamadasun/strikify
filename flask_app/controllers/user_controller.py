@@ -8,9 +8,10 @@ from flask_bcrypt import Bcrypt
 from flask_app.key import token
 import requests
 import json
-import qrcode
-from PIL import Image
+import random
+from flask_qrcode import QRcode
 
+qrcode = QRcode(app)
 bcrypt = Bcrypt(app)
 
 @app.route('/')
@@ -72,7 +73,7 @@ def dashboard():
         "owner_id": session['user_id']
     }
     shop = Shop.get_shop_of_user(data)
-    all_products = Shop.view_all_products()
+    all_products = Shop.view_all_products_by_user_id(data)
 
 
     return render_template("shop_dashboard.html", shop = shop, all_products=all_products)
@@ -107,9 +108,76 @@ def log_out():
         del session['user_id']
     if 'shopping_cart' in session:
         del session['shopping_cart']
+    if 'shop_id' in session:
+        del session['shop_id']
 
     return redirect('/')
 #--------------------------------------------------
+@app.route('/generate_invoice/<int:user_id>')
+def generate_invoice(user_id):
+    #1 GET USER'S STRIKE HANDLE
+    this_user = User.get_by_id({'id':session['user_id']})
+    handle = this_user.strike_username
+
+    print("%%%%%%%%%%%%%%HANDLE", handle)
+
+
+    #2 ISSUE A NEW INVOICE
+        #Correlation ID should be the cart ID
+        #Get all cart items to get subtotal
+    all_cart_items = Shop.get_items_by_cart_id({'shopping_cart_id':session['shopping_cart']})
+    print(all_cart_items)
+
+    subtotal = 0
+    if all_cart_items:
+        for each_item in all_cart_items:
+            subtotal += each_item['product_price']
+
+    url = f"https://api.strike.me/v1/invoices/handle/{handle}"
+
+    payload = json.dumps({
+    "correlationId": session['shopping_cart'] + random.randint(0,1000),
+    "description": "Invoice for Order " + str(session['shopping_cart']),
+    "amount": {
+        "currency": "USD",
+        "amount": str(subtotal)
+    }
+    })
+
+    print("PAYLOAD\n", payload)
+
+    headers = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': 'Bearer '+ token
+    }
+
+    response = requests.request("POST", url, headers=headers, data=payload)
+    issue_invoice_results = response.json()
+    print("RESULTS OF ISSUING AN INVOICE: ", issue_invoice_results)
+
+    #3 ISSUE NEW QUOTE FOR INVOICE****************
+    url = f"https://api.strike.me/v1/invoices/{issue_invoice_results['invoiceId']}/quote"
+    payload={}
+    headers = {
+    'Accept': 'application/json',
+    'Content-Length': '0',
+    'Authorization': 'Bearer ' + token
+    }
+    response = requests.request("POST", url, headers=headers, data=payload)
+    quote_results = response.json()
+
+    print("***********RESULTS OF ISSUING NEW INVOICE QUOTE: \n", quote_results)
+
+    #USE LNINVOICE TO MAKE QRCODE
+    ln_invoice = quote_results['lnInvoice']
+    return render_template('invoice.html', ln_invoice = ln_invoice)
+
+
+@app.route('/payment_success')
+def payment_success():
+    return render_template ('payment_success.html')
+
 
 # @app.route('/generate_invoice/<int: user_id>', methods = ['POST'])
 # def pay_user(user_id):

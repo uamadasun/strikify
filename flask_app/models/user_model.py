@@ -46,8 +46,9 @@ class User:
         SELECT * FROM users
         WHERE users.id = %(id)s;
         '''
-        return connectToMySQL('strikify_schema').query_db(query, data)
-
+        results = connectToMySQL('strikify_schema').query_db(query, data)
+        if results:
+            return cls(results[0])
 
 
 

@@ -6,8 +6,9 @@ from flask_app.controllers import user_controller #[Model class name or file nam
 from flask_app.key import token
 import requests
 import json
-import qrcode
-from PIL import Image
+import random
+from flask_qrcode import QRcode
+
 
 @app.route('/create_shop', methods = ['POST'])
 def create_shop():
@@ -16,7 +17,8 @@ def create_shop():
         'owner_id':session['user_id']
     }
 
-    Shop.create_shop(data)
+    session['shop_id'] = Shop.create_shop(data)
+    
     return redirect('/dashboard')
 
 @app.route('/add_product')
@@ -30,7 +32,7 @@ def new_product():
     data = {
         'product_name':request.form['product_name'],
         'product_price':request.form['product_price'],
-        'quantity_in_stock':request.form['quantity_in_stock'],
+        'shop_id': session['shop_id']
     }
     Shop.add_product(data)
     return redirect('/dashboard')
@@ -44,9 +46,9 @@ def delete_product(product_id):
     Shop.delete_product(data)
     return redirect ('/dashboard')
 
-@app.route('/view_cart')
-def view_cart():
-    all_products = Shop.view_all_products()
+@app.route('/view_order_page')
+def order_page():
+    all_products = Shop.view_all_products_by_user_id({'owner_id':session['user_id']})
 
     data = {
     'user_id': session['user_id']
@@ -55,7 +57,7 @@ def view_cart():
     if 'shopping_cart' not in session:
         session['shopping_cart'] = Shop.create_shopping_cart(data)
 
-    print("Shopping Cart ID", session['shopping_cart'])
+    # print("Shopping Cart ID", session['shopping_cart'])
 
     all_cart_items = Shop.get_items_by_cart_id({'shopping_cart_id': session['shopping_cart']})
     checkout_quantity = 0
@@ -63,7 +65,7 @@ def view_cart():
         for each_item in all_cart_items:
             checkout_quantity += 1
 
-    return render_template('cart.html', all_products = all_products, all_cart_items = all_cart_items, checkout_quantity=checkout_quantity)
+    return render_template('order_page.html', all_products = all_products, all_cart_items = all_cart_items, checkout_quantity=checkout_quantity)
 
 @app.route('/add_item_to_cart/<int:product_id>')
 def add_cart_item(product_id):
@@ -74,18 +76,18 @@ def add_cart_item(product_id):
     Shop.create_shopping_cart_item(data)
 
         
-    return redirect('/view_cart')
+    return redirect('/view_order_page')
 
 @app.route('/checkout')
 def checkout_link():
     all_cart_items = Shop.get_items_by_cart_id({'shopping_cart_id':session['shopping_cart']})
-    print(all_cart_items)
+    # print(all_cart_items)
 
     subtotal = 0
     if all_cart_items:
         for each_item in all_cart_items:
             subtotal += each_item['product_price']
-    print(subtotal)
+    # print(subtotal)
 
     return render_template ('checkout_page.html', all_cart_items = all_cart_items, subtotal = subtotal)
 

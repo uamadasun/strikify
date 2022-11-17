@@ -41,8 +41,8 @@ class Shop:
     @classmethod 
     def add_product(cls, data):
         query = """
-        INSERT INTO products (product_name, product_price, quantity_in_stock)
-        VALUES(%(product_name)s, %(product_price)s, %(quantity_in_stock)s);
+        INSERT INTO products (product_name, product_price, shop_id)
+        VALUES(%(product_name)s, %(product_price)s, %(shop_id)s);
         """
         return connectToMySQL('strikify_schema').query_db(query,data)
 
@@ -54,6 +54,24 @@ class Shop:
         """
         all_products = []
         results = connectToMySQL('strikify_schema').query_db(query)
+        if not results:
+            return False
+        for row in results:
+            all_products.append(row)
+        return all_products
+
+
+    @classmethod
+    def view_all_products_by_user_id(cls, data):
+        query = """
+        SELECT * FROM products
+        JOIN shops
+        ON products.shop_id = shops.id
+        WHERE shops.owner_id = %(owner_id)s
+        ORDER BY product_name;
+        """
+        all_products = []
+        results = connectToMySQL('strikify_schema').query_db(query, data)
         if not results:
             return False
         for row in results:
@@ -117,8 +135,6 @@ class Shop:
         """
         return connectToMySQL('strikify_schema').query_db(query, data)
 
-
-
     @staticmethod
     def validate_product(data):
         is_valid = True
@@ -135,8 +151,5 @@ class Shop:
             flash('Product must be greater than $0.')
             is_valid = False
         
-        if not data['quantity_in_stock']:
-            flash('Product quantity is required.')
-            is_valid = False
 
         return is_valid
