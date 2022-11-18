@@ -28,18 +28,15 @@
                 {%for each_message in get_flashed_messages()%}
                 <p class="text-danger">{{each_message}}</p>
                 {%endfor%}
-                <div style="text-center; display: flex;">
+                <div class="text-center">
                   <img src="{{ url_for('static', filename='Strikify.png') }}"
                     style="width: 185px;" alt="logo">
-                    <div>
-                        <img src="{{ qrcode(ln_invoice) }}" height="200px">
-                        <h4 class="text-danger" style="text-align: center;">{{issue_invoice_results.state}}</h4>
-                    </div>
+                    <img src="{{ qrcode(ln_invoice) }}" height="200px">
+
                 </div>
               </div>
             </div>
             <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
-                
                 <h2 class="mb-4" style="text-align: center;">Time Left to Pay:</h2>
 
               <div class="text-black px-3 py-4 p-md-5 mx-md-4">

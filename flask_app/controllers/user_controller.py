@@ -5,12 +5,11 @@ from flask_app.models.shop_model import Shop
 from flask_app.controllers import shop_controller
 from flask_app.controllers import user_controller 
 from flask_bcrypt import Bcrypt
-from flask_app.key import token, webhook_key
+from flask_app.key import token
 import requests
 import json
 import random
 from flask_qrcode import QRcode
-import time
 
 qrcode = QRcode(app)
 bcrypt = Bcrypt(app)
@@ -109,8 +108,6 @@ def log_out():
         del session['user_id']
     if 'shopping_cart' in session:
         del session['shopping_cart']
-    if 'shop_id' in session:
-        del session['shop_id']
 
     return redirect('/')
 #--------------------------------------------------
@@ -170,40 +167,94 @@ def generate_invoice(user_id):
 
     print("***********RESULTS OF ISSUING NEW INVOICE QUOTE: \n", quote_results)
 
-    #SUBSCRIBE TO WEBHOOK
-
-    url = "https://api.strike.me/v1/subscriptions"
-
-
-    payload = json.dumps({
-    "webhookUrl": "https://kramerica_industries.com/webhook",
-    "webhookVersion": "v1",
-    "secret": webhook_key,
-    "enabled": True,
-    "eventTypes": [
-        "invoice.created",
-        "invoice.updated"
-    ]
-    })
-    headers = {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-    'Authorization': 'Bearer ' + token
-    }
-
-
-    response = requests.request("POST", url, headers=headers, data=payload)
-    webhook_results = response.json()
-
-    print("```````` RESULTS OF webhook_results\n", webhook_results)
     #USE LNINVOICE TO MAKE QRCODE
-    expired = False
-
     ln_invoice = quote_results['lnInvoice']
-
-    return render_template('invoice.html', ln_invoice = ln_invoice, issue_invoice_results = issue_invoice_results)
+    return render_template('invoice.html', ln_invoice = ln_invoice)
 
 
 @app.route('/payment_success')
 def payment_success():
     return render_template ('payment_success.html')
+
+
+# @app.route('/generate_invoice/<int: user_id>', methods = ['POST'])
+# def pay_user(user_id):
+
+#     this_merchant = User.get_by_id(user_id)
+    
+#     url = f"https://api.strike.me/v1/accounts/handle/{this_merchant['strike_username']}/profile"
+#     payload={}
+#     headers = {
+#         'Accept': 'application/json',
+#         'Authorization': 'Bearer ' + token
+#     }
+#     response = requests.request("GET", url, headers=headers, data=payload)
+#     if not response:
+#         flash('User not found, try again.')
+#         return redirect('/go_to_register_page')
+
+#     results = response.json()
+#     print(results)
+
+#     return redirect('/checkout')
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#     url = f"https://api.strike.me/v1/invoices/handle/{handle}"
+
+#     payload = json.dumps({
+#         "correlationId": request.form['correlationId'],
+#         "description": request.form['description'],
+#         "amount": {
+#         "currency": "USD",
+#         "amount": request.form['amount']
+#         }
+#     })
+    
+#     headers = {
+#         'Content-Type': 'application/json',
+#         'Accept': 'application/json',
+#         'Authorization': 'Bearer ' + token
+#     }
+
+#     response = requests.request("POST", url, headers=headers, data=payload)
+#     results = response.json()
+#     # print (results)
+#     return redirect(f"/create_invoice/{results['invoiceId']}")
+
+# @app.route('/create_invoice/<invoiceId>')
+# def invoice(invoiceId):
+#     url = f"https://api.strike.me/v1/invoices/{invoiceId}/quote"
+
+#     payload={}
+#     headers = {
+#     'Accept': 'application/json',
+#     'Content-Length': '0',
+#     'Authorization': 'Bearer ' + token
+# }
+
+#     response = requests.request("POST", url, headers=headers, data=payload)
+#     results = response.json()
+#     print(results)
+
+#     img = qrcode.make(results['lnInvoice'])
+#     img.save(f'invoice{invoiceId}.jpg')
+    
+#     return render_template('invoice.html', invoiceId = invoiceId)
