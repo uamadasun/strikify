@@ -3,7 +3,7 @@ from flask import render_template, redirect, request, session, flash
 from flask_app.models.user_model import User
 from flask_app.models.shop_model import Shop
 from flask_app.controllers import user_controller #[Model class name or file name if it's a one to many relationship]
-from flask_app.key import token
+from flask_app.key import token, webhook_key
 import requests
 import json
 import random
