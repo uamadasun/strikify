@@ -1,3 +1,8 @@
+#FEATURES TO ADD:
+#ADD PAYMENT SUCCESS PAGE THAT CUSTOMER WILL BE ROUTED TO WHEN PAYMENT IS SUCCESSFUL
+#UPDATE INVOICE PAGE TO SHOW WHEN INVOICE IS EXPIRED
+#FIX OVERALL CSS/BOOTSTRAP
+
 from flask_app import app
 from flask import render_template, redirect, request, session, flash
 from flask_app.models.user_model import User
@@ -72,11 +77,14 @@ def dashboard():
     data = {
         "owner_id": session['user_id']
     }
-    shop = Shop.get_shop_of_user(data)
-    all_products = Shop.view_all_products_by_user_id(data)
+
+    #changed this line to remove shop and add session['shop_id']
+    if 'shop_id' in session:
+        shop = Shop.get_shop_of_user(data)
+        all_products = Shop.view_all_products_by_user_id(data)
 
 
-    return render_template("shop_dashboard.html", shop = shop, all_products=all_products)
+    return render_template("shop_dashboard.html", all_products=all_products, shop=shop) #removed shop=shop
 #--------------------------------------------------
 #LOGIN & LOGOUT ROUTES
 @app.route('/login_user', methods = ['POST'])
@@ -96,6 +104,11 @@ def log_in():
     if not bcrypt.check_password_hash(user_in_database.password, request.form['password']):
         flash("Invalid login information. Try again!")
         return redirect('/')
+
+    #MOVED THIS FROM DASHBOARD
+    this_shop = Shop.get_shop_of_user(data)
+    if 'shop_id' not in session:
+        session['shop_id'] = this_shop['id']
 
     session['user_id'] = user_in_database.id #VERY IMPORTANT
     session['shopping_cart'] = Shop.create_shopping_cart({'user_id':session['user_id']})
@@ -117,14 +130,11 @@ def generate_invoice(user_id):
     this_user = User.get_by_id({'id':session['user_id']})
     handle = this_user.strike_username
 
-    print("%%%%%%%%%%%%%%HANDLE", handle)
-
-
     #2 ISSUE A NEW INVOICE
         #Correlation ID should be the cart ID
         #Get all cart items to get subtotal
     all_cart_items = Shop.get_items_by_cart_id({'shopping_cart_id':session['shopping_cart']})
-    print(all_cart_items)
+    # print(all_cart_items)
 
     subtotal = 0
     if all_cart_items:
@@ -142,7 +152,7 @@ def generate_invoice(user_id):
     }
     })
 
-    print("PAYLOAD\n", payload)
+    # print("PAYLOAD\n", payload)
 
     headers = {
     'Content-Type': 'application/json',
@@ -152,7 +162,7 @@ def generate_invoice(user_id):
 
     response = requests.request("POST", url, headers=headers, data=payload)
     issue_invoice_results = response.json()
-    print("RESULTS OF ISSUING AN INVOICE: ", issue_invoice_results)
+    # print("RESULTS OF ISSUING AN INVOICE: ", issue_invoice_results)
 
     #3 ISSUE NEW QUOTE FOR INVOICE****************
     url = f"https://api.strike.me/v1/invoices/{issue_invoice_results['invoiceId']}/quote"
@@ -165,41 +175,11 @@ def generate_invoice(user_id):
     response = requests.request("POST", url, headers=headers, data=payload)
     quote_results = response.json()
 
-    print("***********RESULTS OF ISSUING NEW INVOICE QUOTE: \n", quote_results)
+    # print("***********RESULTS OF ISSUING NEW INVOICE QUOTE: \n", quote_results)
 
     #USE LNINVOICE TO MAKE QRCODE
     ln_invoice = quote_results['lnInvoice']
     return render_template('invoice.html', ln_invoice = ln_invoice)
-
-
-@app.route('/payment_success')
-def payment_success():
-    return render_template ('payment_success.html')
-
-
-# @app.route('/generate_invoice/<int: user_id>', methods = ['POST'])
-# def pay_user(user_id):
-
-#     this_merchant = User.get_by_id(user_id)
-    
-#     url = f"https://api.strike.me/v1/accounts/handle/{this_merchant['strike_username']}/profile"
-#     payload={}
-#     headers = {
-#         'Accept': 'application/json',
-#         'Authorization': 'Bearer ' + token
-#     }
-#     response = requests.request("GET", url, headers=headers, data=payload)
-#     if not response:
-#         flash('User not found, try again.')
-#         return redirect('/go_to_register_page')
-
-#     results = response.json()
-#     print(results)
-
-#     return redirect('/checkout')
-
-
-    
 
 
 

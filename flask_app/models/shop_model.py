@@ -33,9 +33,8 @@ class Shop:
         '''
         
         shop = connectToMySQL('strikify_schema').query_db(query, data)
-        #if you get a tuple out of index error, it's because the email is not in the database and you're trying to return an index that isn't there so add this conditional.
-        if len(shop) > 0:
-            return cls(shop[0])
+        if shop:
+            return shop[0] #CHANGED FROM CLASS
         return False
 
     @classmethod 
