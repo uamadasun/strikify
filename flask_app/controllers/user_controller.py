@@ -1,5 +1,5 @@
 #FEATURES TO ADD:
-#ADD PAYMENT SUCCESS PAGE THAT CUSTOMER WILL BE ROUTED TO WHEN PAYMENT IS SUCCESSFUL
+#USE WEBHOOKS TO ADD PAYMENT SUCCESS PAGE THAT CUSTOMER WILL BE ROUTED TO WHEN PAYMENT IS SUCCESSFUL
 #UPDATE INVOICE PAGE TO SHOW WHEN INVOICE IS EXPIRED
 #FIX OVERALL CSS/BOOTSTRAP
 
@@ -180,61 +180,3 @@ def generate_invoice(user_id):
     #USE LNINVOICE TO MAKE QRCODE
     ln_invoice = quote_results['lnInvoice']
     return render_template('invoice.html', ln_invoice = ln_invoice)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#     url = f"https://api.strike.me/v1/invoices/handle/{handle}"
-
-#     payload = json.dumps({
-#         "correlationId": request.form['correlationId'],
-#         "description": request.form['description'],
-#         "amount": {
-#         "currency": "USD",
-#         "amount": request.form['amount']
-#         }
-#     })
-    
-#     headers = {
-#         'Content-Type': 'application/json',
-#         'Accept': 'application/json',
-#         'Authorization': 'Bearer ' + token
-#     }
-
-#     response = requests.request("POST", url, headers=headers, data=payload)
-#     results = response.json()
-#     # print (results)
-#     return redirect(f"/create_invoice/{results['invoiceId']}")
-
-# @app.route('/create_invoice/<invoiceId>')
-# def invoice(invoiceId):
-#     url = f"https://api.strike.me/v1/invoices/{invoiceId}/quote"
-
-#     payload={}
-#     headers = {
-#     'Accept': 'application/json',
-#     'Content-Length': '0',
-#     'Authorization': 'Bearer ' + token
-# }
-
-#     response = requests.request("POST", url, headers=headers, data=payload)
-#     results = response.json()
-#     print(results)
-
-#     img = qrcode.make(results['lnInvoice'])
-#     img.save(f'invoice{invoiceId}.jpg')
-    
-#     return render_template('invoice.html', invoiceId = invoiceId)
