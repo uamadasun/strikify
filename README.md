@@ -26,27 +26,30 @@ Here are some of the project's best features:
 
 <h2>Demo</h2>
 
-<h4>Log In:</h4>
+<h3>Log In:</h3>
 <p>Merchants can register for a Strikify account only if they have a Strike account. Log in is secured with BCrypt and session. Upon login, new users are directed to create their shop.</p>
 <img src="https://media.giphy.com/media/3t7PrpazAocBFhPo09/giphy.gif" alt="login and registration"/>
 
-<h4>Create a new shop</h4>
+<h3>Create a new shop</h3>
 <p>The shop owner is then prompted to enter their shop's name. After entering their shop name, they can add products to their shop!</p>
 <img src="https://media.giphy.com/media/QdtrfHKyo90hIp2csI/giphy.gif" alt="add a new shop"/>
 
-<h4>Add Products</h4>
+<h3>Add Products</h3>
 <p>Our shop owner is now able to add products to their shop! On this page, they also have the ability to edit and delete their product offerings.</p>
 <img src="https://media.giphy.com/media/wOtf7qIDUbb73wGSST/giphy.gif" alt="adding products"/>
 
-<h4>Add to Cart & Checkout</h4>
+<h3>Add to Cart & Checkout</h3>
 <p>Once our shop owner gets a new customer order, they head to the order page, add the items to cart, and select "Generate invoice" in order to generate a lightning invoice. The Strike API generates the lightning invoice and the shop owner is directed to a page with the generated QR code. The customer can then use any lightning wallet to pay the invoice and receive their goods. The payment will be received in the shop owner's Strike account instantly. </p>
 <img src="https://media.giphy.com/media/AhlgR8KZafoj52VWbu/giphy.gif" alt="order and checkout"/>
 
 
-<h2>Future Features</h2>
-- timer that counts down how long the customer has before the lightning invoice expires (invoice must be paid within 2 minutes or the shop owner has to generate a new invoice)
-- webhook to redirect customer after successful payment or expiration of lightning invoice.
-- Cosmetic UI improvement
+
+<h2>:ledger: Future Features</h2>
+
+- [ ] Timer that counts down how long the customer has before the lightning invoice expires (invoice must be paid within 2 minutes or the shop owner has to generate a new invoice)
+- [ ] Webhook to redirect customer after successful payment or expiration of lightning invoice
+- [ ] Cosmetic UI improvement
+
 
 <h2>🛡️ License:</h2>
 
