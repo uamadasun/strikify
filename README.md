@@ -34,6 +34,13 @@ Technologies used in the project:
 <img src="https://media.giphy.com/media/3t7PrpazAocBFhPo09/giphy.gif" alt="login and registration"/>
 
 <h4>Create a new shop</h4>
+<p>The shop owner is then prompted to enter their shop's name. After entering their shop name, they can add products to their shop!</p>
+<img src="https://media.giphy.com/media/QdtrfHKyo90hIp2csI/giphy.gif" alt="add a new shop"/>
+
+<h4>Add Products</h4>
+<p>Our shop owner is now able to add products to their shop! On this page, they also have the ability to edit and delete their product offerings.</p>
+<img src="https://media.giphy.com/media/wOtf7qIDUbb73wGSST/giphy.gif" alt="adding products"/>
+
 
 
 <h2>🛡️ License:</h2>
