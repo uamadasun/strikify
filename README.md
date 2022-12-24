@@ -46,6 +46,7 @@ Here are some of the project's best features:
 <h2>Future Features</h2>
 - timer that counts down how long the customer has before the lightning invoice expires (invoice must be paid within 2 minutes or the shop owner has to generate a new invoice)
 - webhook to redirect customer after successful payment or expiration of lightning invoice.
+- Cosmetic UI improvement
 
 <h2>🛡️ License:</h2>
 
