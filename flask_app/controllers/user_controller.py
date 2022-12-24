@@ -83,6 +83,9 @@ def dashboard():
     if 'shop_id' in session:
         shop = Shop.get_shop_of_user(data)
         all_products = Shop.view_all_products_by_user_id(data)
+    else:
+        all_products = None
+        shop = None
 
 
     return render_template("shop_dashboard.html", all_products=all_products, shop=shop) #removed shop=shop
@@ -108,8 +111,8 @@ def log_in():
 
     #MOVED THIS FROM DASHBOARD
     this_shop = Shop.get_shop_of_user(data)
-    if 'shop_id' not in session:
-        session['shop_id'] = this_shop['id']
+    # if 'shop_id' not in session:
+    #     session['shop_id'] = this_shop['id']
 
     session['user_id'] = user_in_database.id #VERY IMPORTANT
     session['shopping_cart'] = Shop.create_shopping_cart({'user_id':session['user_id']})
