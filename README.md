@@ -39,7 +39,7 @@ Here are some of the project's best features:
 <img src="https://media.giphy.com/media/wOtf7qIDUbb73wGSST/giphy.gif" alt="adding products"/>
 
 <h3>Add to Cart & Checkout</h3>
-<p>Once our shop owner gets a new customer order, they head to the order page, add the items to cart, and select "Generate invoice" in order to generate a lightning invoice. The Strike API generates the lightning invoice and the shop owner is directed to a page with the generated QR code. The customer can then use any lightning wallet to pay the invoice and receive their goods. The payment will be received in the shop owner's Strike account instantly. </p>
+<p>Once our shop owner gets a new customer order, they head to the order page, add the items to cart, checkout, and select "Generate Invoice" in order to generate a lightning invoice. The Strike API generates the lightning invoice and the shop owner is directed to a page with the generated QR code. The customer can then use any lightning wallet on their own device to pay the invoice. The payment will be received in the shop owner's Strike account instantly. </p>
 <img src="https://media.giphy.com/media/AhlgR8KZafoj52VWbu/giphy.gif" alt="order and checkout"/>
 
 
