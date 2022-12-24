@@ -31,7 +31,7 @@ Technologies used in the project:
 
 <h4>Log In:</h4>
 <p>Log in is secured with BCrypt and session. Upon login, new users are directed to add their shop.</p>
-<img src="http://www.giphy.com/gifs/3t7PrpazAocBFhPo09" alt="login and registration"/>
+<img src="https://media.giphy.com/media/3t7PrpazAocBFhPo09/giphy.gif" alt="login and registration"/>
 
 <h4>Create a new shop</h4>
 
