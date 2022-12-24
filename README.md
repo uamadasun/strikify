@@ -8,21 +8,18 @@
 
 Here are some of the project's best features:
 
-*   Users can upload a photo from their system or from the internet
-*   Users can like photos
-*   Users can leave comments on photos and like other users' comments
-*   Users can edit or delete their photos
-*   The most popular photos (based on # of likes) get priority display on the main dashboard
+*   Merchants can register to use the Strikify app using their Strike app username.
+*   Merchants can add a new shop and add products to their shop
+*   Merchants can take orders, checkout customers and receive payment instantly all from the Strikify app.
 
   
-<h2>💻 Built with</h2>
+<h2>💻 Technologies used:</h2>
 
-Technologies used in the project:
-
-*   Java
-*   Spring Security
+*   Python
+*   Strike API
 *   HTML5
 *   bCrypt
+*   Session
 *   Bootstrap
 *   CSS 3
 *   MySQL
@@ -30,7 +27,7 @@ Technologies used in the project:
 <h2>Demo</h2>
 
 <h4>Log In:</h4>
-<p>Log in is secured with BCrypt and session. Upon login, new users are directed to add their shop.</p>
+<p>Merchants can register for a Strikify account only if they have a Strike account. Log in is secured with BCrypt and session. Upon login, new users are directed to create their shop.</p>
 <img src="https://media.giphy.com/media/3t7PrpazAocBFhPo09/giphy.gif" alt="login and registration"/>
 
 <h4>Create a new shop</h4>
@@ -41,7 +38,14 @@ Technologies used in the project:
 <p>Our shop owner is now able to add products to their shop! On this page, they also have the ability to edit and delete their product offerings.</p>
 <img src="https://media.giphy.com/media/wOtf7qIDUbb73wGSST/giphy.gif" alt="adding products"/>
 
+<h4>Add to Cart & Checkout</h4>
+<p>Once our shop owner gets a new customer order, they head to the order page, add the items to cart, and select "Generate invoice" in order to generate a lightning invoice. The Strike API generates the lightning invoice and the shop owner is directed to a page with the generated QR code. The customer can then use any lightning wallet to pay the invoice and receive their goods. The payment will be received in the shop owner's Strike account instantly. </p>
+<img src="https://media.giphy.com/media/AhlgR8KZafoj52VWbu/giphy.gif" alt="order and checkout"/>
 
+
+<h2>Future Features</h2>
+- timer that counts down how long the customer has before the lightning invoice expires (invoice must be paid within 2 minutes or the shop owner has to generate a new invoice)
+- webhook to redirect customer after successful payment or expiration of lightning invoice.
 
 <h2>🛡️ License:</h2>
 
